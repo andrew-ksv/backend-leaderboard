@@ -1,3 +1,10 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Admin
+ *   description: Admin endpoints
+ */
+
 const express = require('express');
 const router = express.Router();
 const { body, param } = require('express-validator');
@@ -10,6 +17,34 @@ const validateScore = require('../middlewares/validateScore');
 const adminAuth = require('../middlewares/auth');
 const adminController = require('../controllers/adminController');
 
+/**
+ * @swagger
+ * /api/admin/register:
+ *   post:
+ *     summary: Register new admin
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: admin123
+ *               password:
+ *                 type: string
+ *                 example: secret123
+ *     responses:
+ *       201:
+ *         description: Admin registered successfully
+ *       400:
+ *         description: Validation error
+ */
 // Register admin
 router.post(
   '/register',
@@ -25,6 +60,30 @@ router.post(
   adminController.register
 );
 
+/**
+ * @swagger
+ * /api/admin/login:
+ *   post:
+ *     summary: Admin login
+ *     tags: [Admin]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: JWT token
+ */
 // Admin login
 router.post(
   '/login',
@@ -36,9 +95,45 @@ router.post(
   adminController.login
 );
 
+/**
+ * @swagger
+ * /api/admin/me:
+ *   get:
+ *     summary: Get admin profile
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Admin profile
+ */
 // Get admin profile
 router.get('/me', adminAuth, adminController.getMe);
 
+/**
+ * @swagger
+ * /api/admin/scores/{id}:
+ *   put:
+ *     summary: Update score (admin only)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Score updated
+ */
 // Edit scores (admin only)
 router.put(
   '/scores/:id',
@@ -64,6 +159,29 @@ router.put(
   }
 );
 
+/**
+ * @swagger
+ * /api/admin/scores/{id}:
+ *   delete:
+ *     summary: Delete score (admin only)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: 65c123abc456def789012345
+ *     responses:
+ *       200:
+ *         description: Score deleted successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Score not found
+ */
 // Delete score (admin only)
 router.delete(
   '/scores/:id',

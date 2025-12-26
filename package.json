@@ -10,7 +10,9 @@
     "http-errors": "^2.0.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
@@ -18,5 +20,5 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js"
-}
+  }
 }
